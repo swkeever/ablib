@@ -5,9 +5,9 @@ import (
 )
 
 type Experiment struct {
-	Name string
-	Desc string
-	Comp []Component
+	Name  string
+	Desc  string
+	Comp  []Component
 }
 
 // Treatment returns the treatment name deterministically

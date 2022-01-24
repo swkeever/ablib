@@ -13,7 +13,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to make config: %v", err)
 	}
-	n := 100_000_000
+	n := 6_000_000
 	start := time.Now()
 	experiment, err := config.Experiment("hello_world")
 	if err != nil {
