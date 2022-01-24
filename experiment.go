@@ -2,7 +2,6 @@ package ablib
 
 import (
 	"fmt"
-	"sort"
 )
 
 type Experiment struct {
@@ -17,29 +16,25 @@ type Experiment struct {
 // The input string depends on the business logic of your application.
 // For example, if you want to bucket users based on user ID, you can
 // pass the user ID as the input string.
-func (e Experiment) Treatment(input string) (string, error) {
-	// Determine total scale of components
-	scale := 0
-	for _, comp := range e.Comp {
-		if comp.Dist < 0 {
-			return "", fmt.Errorf("dist < 0 for %s->%s", e.Name, comp.Name)
+func (e Experiment) Treatment(in string) (string, error) {
+	// Get sum of all distributions
+	n := 0
+	for _, cmp := range e.Comp {
+		if cmp.Dist < 0 {
+			return "", fmt.Errorf("dist < 0 for %s->%s", e.Name, cmp.Name)
 		}
-		scale += comp.Dist
-	}
-	// Determine buckets to hash into
-	offset := 0
-	buckets := make([]int, 0, len(e.Comp))
-	for _, comp := range e.Comp {
-		offset += comp.Dist
-		buckets = append(buckets, offset)
+		n += cmp.Dist
 	}
 	// Hash into a bucket
-	target := hash(input) % scale
-	idx := sort.SearchInts(buckets, target)
-	if idx < len(buckets) && buckets[idx] == target {
-		idx++
+	key := hash(in) % n
+	off := 0
+	for i, cmp := range e.Comp {
+		off += cmp.Dist
+		if key < off {
+			return e.Comp[i].Name, nil
+		}
 	}
-	return e.Comp[idx].Name, nil
+	panic("Reaching here indicates a bug. Please create an issue at https://github.com/swkeever/ablib/issues.")
 }
 
 // Returns the experiment name and description (if available).

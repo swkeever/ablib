@@ -9,11 +9,11 @@ import (
 )
 
 func main() {
-	config, err := ablib.MakeConfig("config.yml")
+	config, err := ablib.MakeConfig("example_config.yml")
 	if err != nil {
 		log.Fatalf("failed to make config: %v", err)
 	}
-	n := 2_000_000
+	n := 100_000_000
 	start := time.Now()
 	experiment, err := config.Experiment("hello_world")
 	if err != nil {
@@ -29,8 +29,8 @@ func main() {
 		ctr[t]++
 	}
 	fmt.Printf("took %v for %d trials of %v\n", time.Since(start), n, experiment)
-	for _, comp := range experiment.Comp {
-		fmt.Printf("\t%s=%0.4f%%\n", comp.Name, (float64(ctr[comp.Name])*100.0)/float64(n))
+	for _, cmp := range experiment.Comp {
+		fmt.Printf("\t%s=%0.4f%%\n", cmp.Name, (float64(ctr[cmp.Name])*100.0)/float64(n))
 	}
 }
 
