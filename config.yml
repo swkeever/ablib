@@ -1,0 +1,16 @@
+hello_world:
+  desc: "testing the A/B testing library"
+  comp:
+    -
+      name: t1
+      dist: 5
+    -
+      name: t2
+      dist: 60
+    -
+      name: t3
+      dist: 20
+    -
+      name: t4
+      dist: 15
+
