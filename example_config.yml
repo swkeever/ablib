@@ -14,3 +14,11 @@ hello_world:
       name: t4
       dist: 15
 
+foo:
+  comp:
+    -
+      name: show_blue_button
+      dist: 50
+    -
+      name: show_white_button
+      dist: 50

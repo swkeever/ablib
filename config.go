@@ -4,10 +4,20 @@ import (
 	"fmt"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"strings"
 )
 
 type ABConfig struct {
 	configs map[string]Experiment
+}
+
+func (c *ABConfig) String() string {
+	var sb strings.Builder
+	sb.WriteString("experiments:\n")
+	for key := range c.configs {
+		sb.WriteString(fmt.Sprintf("- %s\n", key))
+	}
+	return sb.String()
 }
 
 // MakeConfig builds an experiment configuration given a file
@@ -51,3 +61,6 @@ func (c *ABConfig) Experiment(name string) (Experiment, error) {
 	conf.Name = name
 	return conf, nil
 }
+
+
+

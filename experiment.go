@@ -5,9 +5,9 @@ import (
 )
 
 type Experiment struct {
-	Name  string
-	Desc  string
-	Comp  []Component
+	Name string
+	Desc string
+	Comp []Component
 }
 
 // Treatment returns the treatment name deterministically
@@ -34,7 +34,7 @@ func (e Experiment) Treatment(in string) (string, error) {
 			return e.Comp[i].Name, nil
 		}
 	}
-	panic("Reaching here indicates a bug. Please create an issue at https://github.com/swkeever/ablib/issues.")
+	return "", fmt.Errorf("failed to bucket key %d", key)
 }
 
 // Returns the experiment name and description (if available).
