@@ -4,10 +4,11 @@ import (
 	"fmt"
 )
 
-type Experiment struct {
+type Experiments map[string]Experiment
+type Experiment []Component
+type Component struct {
 	Name string
-	Desc string
-	Comp []Component
+	Dist int
 }
 
 // Treatment returns the treatment name deterministically
@@ -19,28 +20,23 @@ type Experiment struct {
 func (e Experiment) Treatment(in string) (string, error) {
 	// Get sum of all distributions
 	n := 0
-	for _, cmp := range e.Comp {
-		if cmp.Dist < 0 {
-			return "", fmt.Errorf("dist < 0 for %s->%s", e.Name, cmp.Name)
+	for _, comp := range e {
+		if comp.Dist < 0 {
+			return "", fmt.Errorf("dist < 0 for %s", comp.Name)
 		}
-		n += cmp.Dist
+		n += comp.Dist
+	}
+	if n == 0 {
+		return "", fmt.Errorf("total treatment allocation is 0")
 	}
 	// Hash into a bucket
 	key := hash(in) % n
 	off := 0
-	for i, cmp := range e.Comp {
-		off += cmp.Dist
+	for _, comp := range e {
+		off += comp.Dist
 		if key < off {
-			return e.Comp[i].Name, nil
+			return comp.Name, nil
 		}
 	}
 	return "", fmt.Errorf("failed to bucket key %d", key)
-}
-
-// Returns the experiment name and description (if available).
-func (e Experiment) String() string {
-	if e.Desc != "" {
-		return fmt.Sprintf("%s (%s)", e.Name, e.Desc)
-	}
-	return e.Name
 }

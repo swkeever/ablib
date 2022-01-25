@@ -1,4 +1,0 @@
-foo:
-  comp:
-    - name: "foo"
-      dist: "whoops"

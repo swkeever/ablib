@@ -11,4 +11,3 @@ func hash(s string) int {
 	}
 	return k
 }
-
